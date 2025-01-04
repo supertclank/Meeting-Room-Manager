@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from backend.models.room import Room
 
 #Room Schemas
 class RoomCreate(BaseModel):

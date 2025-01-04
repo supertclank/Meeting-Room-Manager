@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from backend.schemas.user import UserCreate, UserRead, User, UserRole
+from backend.schemas.users import UserCreate, UserRead, User, UserRole
 from backend.crud.users import get_user_by_id
 from database import get_db
 

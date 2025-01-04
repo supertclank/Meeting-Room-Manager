@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from datetime import date
-from backend.models.user import User
 import enum
 
 #User Schemas
