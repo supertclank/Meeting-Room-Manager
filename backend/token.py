@@ -22,10 +22,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Password hashing and verification methods
 @classmethod
 def verify_password(cls, plain_password, hashed_password):
     return cls.pwd_context.verify(plain_password, hashed_password)
 
+# Authenticate user and create access token methods
 @classmethod
 def authenticate_user(cls, db: Session, username: str, password: str):
     user = db.query(User).filter(User.username == username).first()
@@ -40,6 +42,7 @@ def authenticate_user(cls, db: Session, username: str, password: str):
         
     return None
 
+# Create access token method
 @classmethod
 def create_access_token(cls, data: dict, expires_delta: timedelta = None) -> str:
     to_encode = data.copy()

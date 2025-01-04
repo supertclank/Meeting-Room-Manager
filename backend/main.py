@@ -4,8 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from router.users import router as users_router
-from router.bookings import router as bookings_router
-from router.rooms import router as rooms_router
+from backend.router.booking import router as bookings_router
+from backend.router.room import router as rooms_router
 from router.login import router as login_router
 from router.notification import router as notification_router
 
