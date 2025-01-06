@@ -4,7 +4,7 @@ import logging
 
 from backend.schemas.notification import NotificationCreate, NotificationRead
 from backend.crud.notification import create_notification, get_notification_by_id, delete_notification
-from database import get_db
+from backend.utils.database import get_db
 
 # Initialize the logger
 logger = logging.getLogger(__name__)

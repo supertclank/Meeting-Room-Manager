@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 
 from backend.schemas.login import LoginRequest, TokenResponse
-from database import get_db
-from backend.token import TokenManager
+from backend.utils.database import get_db
+from backend.utils.token import TokenManager
 
 # Initialize the logger
 logger = logging.getLogger(__name__)

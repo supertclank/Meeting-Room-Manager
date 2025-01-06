@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from backend.schemas.users import UserRole, UserRead
 from backend.crud.users import get_user_by_id
-from database import get_db
+from backend.utils.database import get_db
 
 # Define the secret key and algorithm used for JWT
 SECRET_KEY = "your_secret_key"

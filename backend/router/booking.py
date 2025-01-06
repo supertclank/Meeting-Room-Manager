@@ -5,8 +5,8 @@ import logging
 from backend.schemas.booking import BookingCreate, BookingRead, BookingStatus
 from backend.schemas.users import UserRead, UserRole
 from backend.crud.booking import create_booking, update_booking, get_booking_by_id, delete_booking
-from backend.dependencies import get_current_active_user, get_current_active_admin
-from database import get_db
+from backend.utils.dependencies import get_current_active_user, get_current_active_admin
+from backend.utils.database import get_db
 
 # Initialize the logger
 logger = logging.getLogger(__name__)

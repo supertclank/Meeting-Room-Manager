@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 import logging
 
 from backend.schemas.users import UserCreate, UserRead
-from backend.crud.users import create_user, get_user_by_email, get_user_by_id
-from database import get_db
+from backend.crud.users import create_user, get_user_by_email, get_user_by_id, delete_user
+from backend.utils.database import get_db
 
 # Initialize the logger
 logger = logging.getLogger(__name__)

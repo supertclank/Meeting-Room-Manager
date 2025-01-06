@@ -4,8 +4,8 @@ import logging
 
 from backend.schemas.room import RoomCreate, RoomRead
 from backend.crud.room import create_room, get_room_by_id, delete_room
-from backend.dependencies import get_current_active_admin
-from database import get_db
+from backend.utils.dependencies import get_current_active_admin
+from backend.utils.database import get_db
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
