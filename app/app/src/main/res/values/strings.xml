@@ -16,4 +16,7 @@
     <string name="incorrect_username_or_password">Incorrect Username Or Password</string>
     <string name="user_not_found">User Not Found</string>
     <string name="login_failed_general">Login Failed</string>
+    <string name="forgot_details_title">Forgot Details</string>
+    <string name="submit">Submit</string>
+    <string name="back">Back</string>
 </resources>

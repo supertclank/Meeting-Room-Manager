@@ -1,26 +1,25 @@
 package api
 
+import api.data_class.BookingCreate
+import api.data_class.BookingRead
+import api.data_class.EmailRecoveryRequest
 import api.data_class.NotificationCreate
 import api.data_class.NotificationRead
+import api.data_class.RoomCreate
+import api.data_class.RoomRead
 import api.data_class.TokenResponse
 import api.data_class.UserCreate
 import api.data_class.UserRead
-import api.data_class.BookingCreate
-import api.data_class.BookingRead
-import api.data_class.RoomRead
-import api.data_class.RoomCreate
-import api.data_class.UserPreferences
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Header
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
@@ -34,7 +33,10 @@ interface ApiService {
     fun createUser(@Body user: UserCreate): retrofit2.Call<UserRead>
 
     @GET("users/")
-    fun getUsers(@Query("skip") skip: Int, @Query("limit") limit: Int): retrofit2.Call<List<UserRead>>
+    fun getUsers(
+        @Query("skip") skip: Int,
+        @Query("limit") limit: Int,
+    ): retrofit2.Call<List<UserRead>>
 
     @GET("user/{user_id}")
     fun getUser(
@@ -119,4 +121,8 @@ interface ApiService {
     fun deleteNotification(
         @Path("notification_id") notificationId: Int,
     ): retrofit2.Call<Void>
+
+    @POST("email/recover/")
+    fun recoverEmail(@Body recoveryRequest: EmailRecoveryRequest): Call<Void>
+
 }

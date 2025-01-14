@@ -10,5 +10,5 @@
     <attr name="colorOnSurface" format="color" />
     <attr name="colorError" format="color" />
     <attr name="colorOnError" format="color" />
-    <attr name="colorPrimaryContainer" format="color"/>
+    <attr name="colorPrimaryContainer" format="color" />
 </resources>

@@ -1,7 +1,7 @@
 package api.data_class
 
-data class UserCreate (
+data class UserCreate(
     val name: String,
     val email: String,
-    val password: String
+    val password: String,
 )

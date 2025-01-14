@@ -3,52 +3,37 @@ package com.example.meeting_room_manager.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import com.auth0.android.jwt.JWT
 import com.example.meeting_room_manager.R
+import com.example.meeting_room_manager.ui.LoginScreen
+import com.example.meeting_room_manager.utils.TokenUtils
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
-import com.example.meeting_room_manager.utils.TokenUtils
 
-class LoginActivity : AppCompatActivity() {
-    // UI components
-    private lateinit var usernameEditText: EditText
-    private lateinit var passwordEditText: EditText
-
+class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login) // Set the login layout.
-
-        // Initialize UI elements
-        usernameEditText = findViewById(R.id.username)
-        passwordEditText = findViewById(R.id.password)
-
-
-        findViewById<Button>(R.id.forgot).setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    ForgotDetailsActivity::class.java
-                )
-            ) // Go to ForgotDetailsActivity
-        }
-
-        findViewById<Button>(R.id.login).setOnClickListener {
-            loginVerify() // Verify login details.
+        setContent {
+            LoginScreen(
+                onLoginClick = { username, password ->
+                    loginVerify(username, password)
+                },
+                onForgotDetailsClick = {
+                    startActivity(Intent(this, ForgotDetailsActivity::class.java))
+                }
+            )
         }
     }
 
     // Function to verify user login.
-    private fun loginVerify() {
-        val username = usernameEditText.text.toString().trim()
-        val password = passwordEditText.text.toString().trim()
+    private fun loginVerify(username: String, password: String) {
 
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, getString(R.string.enter_credentials), Toast.LENGTH_SHORT).show()
@@ -158,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
             // Function to decode the token and extract the user ID
             private fun decodeToken(token: String): Int? {
                 return try {
-                    val decodedToken = JWT(token) // Use the JWT constructor to decode
+                    val decodedToken = JWT(token)
                     decodedToken.getClaim("id").asInt() // Extract the user ID
                 } catch (e: Exception) {
                     Log.e("LoginActivity", "Failed to decode token: ${e.message}", e)
