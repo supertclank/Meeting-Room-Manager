@@ -2,7 +2,7 @@ package com.example.meeting_room_manager.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log // Import for logging
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.icons.Icons
@@ -93,6 +93,6 @@ abstract class BaseActivity : ComponentActivity() {
 
     private fun backButton() {
         Log.d(tag, "BackButton clicked.")
-        finish()
+        startActivity(Intent(this, DashboardActivity::class.java))
     }
 }

@@ -2,3 +2,4 @@
 backend/__pycache__/main.cpython-312.pyc
 /backend/alembic
 /backend/__pycache__
+*.pyc

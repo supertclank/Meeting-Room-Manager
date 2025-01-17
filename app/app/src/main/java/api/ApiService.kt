@@ -71,6 +71,9 @@ interface ApiService {
         @Path("booking_id") bookingId: Int,
     ): Call<BookingRead>
 
+    @GET("bookings/")
+    fun getBookings(): Call<List<BookingRead>>
+
     @PUT("bookings/{booking_id}")
     fun updateBooking(
         @Path("booking_id") bookingId: Int,
@@ -87,6 +90,9 @@ interface ApiService {
     fun getRoom(
         @Path("room_id") roomId: Int,
     ): Call<RoomRead>
+
+    @GET("rooms/")
+    fun getRooms(): Call<List<RoomRead>>
 
     @POST("rooms/{room_id}")
     fun createNewRoom(
