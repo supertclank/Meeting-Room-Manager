@@ -26,27 +26,27 @@ interface ApiService {
     //User endpoints
 
     @GET("users/email/{email}")
-    fun checkUserExistsByEmail(@Path("email") email: String): retrofit2.Call<Boolean>
+    fun checkUserExistsByEmail(@Path("email") email: String): Call<Boolean>
 
     // User endpoints
     @POST("users/")
-    fun createUser(@Body user: UserCreate): retrofit2.Call<UserRead>
+    fun createUser(@Body user: UserCreate): Call<UserRead>
 
     @GET("users/")
     fun getUsers(
         @Query("skip") skip: Int,
         @Query("limit") limit: Int,
-    ): retrofit2.Call<List<UserRead>>
+    ): Call<List<UserRead>>
 
     @GET("user/{user_id}")
     fun getUser(
         @Path("user_id") userId: Int,
-    ): retrofit2.Call<UserRead>
+    ): Call<UserRead>
 
     @DELETE("user/{user_id}")
     fun deleteUser(
         @Path("user_id") userId: Int,
-    ): retrofit2.Call<Void>
+    ): Call<Void>
 
     @FormUrlEncoded
     @POST("login/")
@@ -57,7 +57,7 @@ interface ApiService {
         @Field("scope") scope: String? = null,
         @Field("client_id") clientId: String? = null,
         @Field("client_secret") clientSecret: String? = null,
-    ): retrofit2.Call<TokenResponse>
+    ): Call<TokenResponse>
 
     //Booking endpoints
     @POST("bookings/{booking_id}")
@@ -69,58 +69,58 @@ interface ApiService {
     @GET("bookings/{booking_id}")
     fun getBooking(
         @Path("booking_id") bookingId: Int,
-    ): retrofit2.Call<BookingRead>
+    ): Call<BookingRead>
 
     @PUT("bookings/{booking_id}")
     fun updateBooking(
         @Path("booking_id") bookingId: Int,
         @Body booking: BookingCreate,
-    ): retrofit2.Call<BookingRead>
+    ): Call<BookingRead>
 
     @DELETE("bookings/{booking_id}")
     fun deleteBooking(
         @Path("booking_id") bookingId: Int,
-    ): retrofit2.Call<Void>
+    ): Call<Void>
 
     //Room endpoints
     @GET("rooms/{room_id}")
     fun getRoom(
         @Path("room_id") roomId: Int,
-    ): retrofit2.Call<RoomRead>
+    ): Call<RoomRead>
 
     @POST("rooms/{room_id}")
     fun createNewRoom(
         @Path("room_id") roomId: Int,
         @Body room: RoomCreate,
-    ): retrofit2.Call<RoomRead>
+    ): Call<RoomRead>
 
     @PUT("rooms/{room_id}")
     fun updateRoom(
         @Path("room_id") roomId: Int,
         @Body room: RoomCreate,
-    ): retrofit2.Call<RoomRead>
+    ): Call<RoomRead>
 
     @DELETE("rooms/{room_id}")
     fun deleteRoom(
         @Path("room_id") roomId: Int,
-    ): retrofit2.Call<Void>
+    ): Call<Void>
 
     //Notification endpoints
     @GET("notifications/{notification_id}")
     fun getNotification(
         @Path("notification_id") notificationId: Int,
-    ): retrofit2.Call<NotificationRead>
+    ): Call<NotificationRead>
 
     @POST("notifications/{notification_id}")
     fun createNewNotification(
         @Path("notification_id") notificationId: Int,
         @Body notification: NotificationCreate,
-    ): retrofit2.Call<NotificationCreate>
+    ): Call<NotificationCreate>
 
     @DELETE("notifications/{notification_id}")
     fun deleteNotification(
         @Path("notification_id") notificationId: Int,
-    ): retrofit2.Call<Void>
+    ): Call<Void>
 
     @POST("email/recover/")
     fun recoverEmail(@Body recoveryRequest: EmailRecoveryRequest): Call<Void>

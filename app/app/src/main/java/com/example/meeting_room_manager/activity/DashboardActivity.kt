@@ -1,68 +1,65 @@
 package com.example.meeting_room_manager.activity
 
-import android.util.Log
-import android.widget.TextView
+import android.os.Bundle
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import api.RetrofitClient
-import api.data_class.UserRead
 import com.example.meeting_room_manager.ui.DashboardScreen
 import com.example.meeting_room_manager.utils.TokenUtils
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 
+class DashboardActivity : BaseActivity() {
 
-class DashboardActivity : BaseActivity(){
-    private lateinit var greetingTextView: TextView
+    override fun getScreenTitle(): String {
+        return "Dashboard"
+    }
+    override fun setBackButton(): Boolean {
+        return false
+    }
 
-    setContent {
+    @Composable
+    override fun ScreenContent() {
+        var greeting by remember { mutableStateOf("Hi, Guest!") }
+        val coroutineScope = rememberCoroutineScope()
+
+        // Fetch greeting when the composable is displayed
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                greeting = fetchGreeting()
+            }
+        }
+
+        // Pass the greeting and interactions to DashboardScreen
         DashboardScreen(
-            title = getScreenTitle(),
-            content = { ScreenContent() }
+            content = {
+                // Display the greeting
+                androidx.compose.material3.Text(text = greeting)
+            },
         )
     }
 
-    // Display a greeting based on the user's first name
-    private fun displayGreeting() {
+    fun fetchGreeting(): String {
         val token = TokenUtils.getTokenFromStorage(this)
-        Log.d("AppLog", "Token: $token") // Log token to see if it's null or valid
-
         if (token != null) {
             val userId = TokenUtils.decodeTokenManually(token)
-            Log.d("AppLog", "User ID: $userId") // Log the user ID
-
             if (userId != null) {
-                Log.d("AppLog", "Fetching user data for userId: $userId")
-                fetchUserFirstName(userId) // Pass userId directly
-            } else {
-                Log.e("AppLog", "User ID is null")
-                greetingTextView.text = "Hi, Guest!"
-            }
-        } else {
-            Log.e("AppLog", "Token is null")
-            greetingTextView.text = "Hi, Guest!"
-        }
-    }
-
-    private fun fetchUserFirstName(userId: Int) {
-        val apiService = RetrofitClient.instance
-        Log.d("AppLog", "API call to fetch user with ID: $userId") // Log userId
-
-        apiService.getUser(userId = userId).enqueue(object : Callback<UserRead> {
-            override fun onResponse(call: Call<UserRead>, response: Response<UserRead>) {
-                Log.d("AppLog", "API Response: ${response.body()}")
-                if (response.isSuccessful) {
-                    val firstName = response.body()?.name ?: "User"
-                    greetingTextView.text = "Hi, $firstName!"
-                } else {
-                    Log.e("AppLog", "Failed to fetch user data. Response code: ${response.code()}")
-                    greetingTextView.text = "Hi, Guest!"
+                return try {
+                    val response = RetrofitClient.instance.getUser(userId).execute()
+                    if (response.isSuccessful) {
+                        response.body()?.name?.let { "Hi, $it!" } ?: "Hi, Guest!"
+                    } else {
+                        "Hi, Guest!"
+                    }
+                } catch (e: Exception) {
+                    "Hi, Guest!"
                 }
             }
-
-            override fun onFailure(call: Call<UserRead>, t: Throwable) {
-                Log.e("AppLog", "API call failed: ${t.message}")
-                greetingTextView.text = "Hi, Guest!"
-            }
-        })
+        }
+        return "Hi, Guest!"
     }
 }

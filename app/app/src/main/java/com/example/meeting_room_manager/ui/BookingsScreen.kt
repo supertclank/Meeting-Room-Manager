@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun DashboardScreen(
+fun BookingsScreen(
     content: @Composable () -> Unit,
 ) {
     Scaffold { paddingValues ->
