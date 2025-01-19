@@ -31,7 +31,7 @@ fun LoginScreen(
     onLoginClick: (String, String) -> Unit,
     onForgotDetailsClick: () -> Unit,
 ) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Box(
@@ -56,8 +56,8 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = email,
+                onValueChange = { email = it },
                 label = { Text(text = stringResource(id = R.string.email)) },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -73,7 +73,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { onLoginClick(username, password) },
+                onClick = { onLoginClick(email, password) },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(id = R.string.login))

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AddRoomDialog(
     onDismissRequest: () -> Unit,
-    onRoomAdded: (String, Int, String?) -> Unit // Changed to include amenities
+    onRoomAdded: (String, Int, String?) -> Unit, // Changed to include amenities
 ) {
     var roomName by remember { mutableStateOf("") }
     var roomCapacity by remember { mutableStateOf("") }

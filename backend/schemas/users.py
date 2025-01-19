@@ -4,7 +4,8 @@ import enum
 
 #User Schemas
 class UserBase(BaseModel):
-    name: str
+    first_name: str
+    last_name: str
     email: str
 
 class UserCreate(UserBase):

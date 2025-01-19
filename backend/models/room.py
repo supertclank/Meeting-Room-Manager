@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean
-from backend.models import Base
+from sqlalchemy.orm import relationship
+from .base import Base
 
-#Room Table
+# Room Table
 class Room(Base):
     __tablename__ = "rooms"
 
@@ -9,4 +10,6 @@ class Room(Base):
     name = Column(String(100), nullable=False)
     capacity = Column(Integer, nullable=False)
     amenities = Column(Text, nullable=True)
-    availability = Column(Boolean, default=True)
+    availability = Column(Boolean, nullable=True)
+
+    bookings = relationship("Booking", back_populates="room")

@@ -1,9 +1,10 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from .base import Base
 from datetime import datetime
-from backend.models import Base
 
-#Notification Table
+
+# Notification Table
 class Notification(Base):
     __tablename__ = "notifications"
 
@@ -14,3 +15,4 @@ class Notification(Base):
     sent_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="notifications")
+    booking = relationship("Booking", back_populates="notifications")

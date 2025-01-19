@@ -9,6 +9,10 @@ class RoomCreate(BaseModel):
     
 class RoomRead(BaseModel):
     id: int
+    name: str
+    capacity: int
+    amenities: str | None
+    availability: bool
 
     class Config:
         orm_mode = True

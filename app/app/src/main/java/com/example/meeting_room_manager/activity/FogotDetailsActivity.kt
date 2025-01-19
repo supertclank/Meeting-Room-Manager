@@ -18,14 +18,14 @@ class ForgotDetailsActivity : ComponentActivity() {
             ForgotDetailsScreen(
                 onBackClick = { finish() }, // Close the activity
                 onSubmitClick = { email ->
-                    recoverUsername(email)
+                    recoverEmail(email)
                 }
             )
 
         }
     }
 
-    private fun recoverUsername(email: String) {
+    private fun recoverEmail(email: String) {
         val recoveryRequest = EmailRecoveryRequest(email)
         val call = RetrofitClient.instance.recoverEmail(recoveryRequest)
 
@@ -34,7 +34,7 @@ class ForgotDetailsActivity : ComponentActivity() {
                 if (response.isSuccessful) {
                     Toast.makeText(
                         this@ForgotDetailsActivity,
-                        "Check your email for your username",
+                        "Check your email for your email",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {

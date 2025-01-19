@@ -1,4 +1,4 @@
-from backend.models import User
+from models.users import User
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
@@ -17,45 +17,45 @@ class TokenManager:
     ALGORITHM = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     
-# OAuth2 scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    # OAuth2 scheme
+    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+    # Password hashing context
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Password hashing and verification methods
-@classmethod
-def verify_password(cls, plain_password, hashed_password):
-    return cls.pwd_context.verify(plain_password, hashed_password)
+    # Password hashing and verification methods
+    @classmethod
+    def verify_password(cls, plain_password, hashed_password):
+        return cls.pwd_context.verify(plain_password, hashed_password)
 
-# Authenticate user and create access token methods
-@classmethod
-def authenticate_user(cls, db: Session, username: str, password: str):
-    user = db.query(User).filter(User.username == username).first()
-    logger.info(f"Retrieved user: {user}")  # Log the retrieved user object
+    # Authenticate user method
+    @classmethod
+    def authenticate_user(cls, db: Session, email: str, password: str):
+        user = db.query(User).filter(User.email == email).first()
+        logger.info(f"Retrieved user: {user}")  # Log the retrieved user object
 
-    if user:
-        is_valid_password = cls.verify_password(password, user.password)
-        logger.info(f"Password verification result: {is_valid_password}")  # Log the password verification result
+        if user:
+            is_valid_password = cls.verify_password(password, user.password)
+            logger.info(f"Password verification result: {is_valid_password}")  # Log the password verification result
+            
+            if is_valid_password:
+                return user
+            
+        return None
+
+    # Create access token method
+    @classmethod
+    def create_access_token(cls, data: dict, expires_delta: timedelta = None) -> str:
+        to_encode = data.copy()
         
-        if is_valid_password:
-            return user
+        # Set expiration time
+        expire = datetime.utcnow() + (expires_delta or timedelta(minutes=cls.ACCESS_TOKEN_EXPIRE_MINUTES))
+        to_encode.update({"exp": expire})
         
-    return None
+        if 'id' in data:
+            to_encode["id"] = data['id']
+        else:
+            raise ValueError("User ID must be provided in the token payload")
 
-# Create access token method
-@classmethod
-def create_access_token(cls, data: dict, expires_delta: timedelta = None) -> str:
-    to_encode = data.copy()
-    
-    # Set expiration time
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=cls.ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
-    
-    if 'id' in data:
-        to_encode["id"] = data['id']
-    else:
-        raise ValueError("User ID must be provided in the token payload")
-
-    # Encode the JWT
-    encoded_jwt = jwt.encode(to_encode, cls.SECRET_KEY, algorithm=cls.ALGORITHM)
-    return encoded_jwt
+        # Encode the JWT
+        encoded_jwt = jwt.encode(to_encode, cls.SECRET_KEY, algorithm=cls.ALGORITHM)
+        return encoded_jwt

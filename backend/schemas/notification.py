@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from backend.schemas.users import UserRead
+from schemas.users import UserRead
 
 #Notification Schemas
 class NotificationBase(BaseModel):

@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import logging
 
-from backend.schemas.booking import BookingCreate, BookingRead, BookingStatus
-from backend.schemas.users import UserRead, UserRole
-from backend.crud.booking import create_booking, update_booking, get_booking_by_id, delete_booking
-from backend.utils.dependencies import get_current_active_user, get_current_active_admin
-from backend.utils.database import get_db
+from schemas.booking import BookingCreate, BookingRead, BookingStatus
+from schemas.users import UserRead, UserRole
+from crud.booking import create_booking, update_booking, get_booking_by_id, delete_booking
+from utils.dependencies import get_current_active_user, get_current_active_admin
+from utils.database import get_db
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 router = APIRouter()
 
 #create a new booking
-@router.post("/bookings/", response_model=BookingRead)
+@router.post("/", response_model=BookingRead)
 def create_new_booking(
     booking: BookingCreate,
     db: Session = Depends(get_db),
@@ -24,7 +24,7 @@ def create_new_booking(
     return create_booking(db, booking, current_user.id)
 
 #read a booking by ID
-@router.get("/bookings/{booking_id}", response_model=BookingRead)
+@router.get("/{booking_id}", response_model=BookingRead)
 def read_booking_by_id(
     booking_id: int,
     db: Session = Depends(get_db),
@@ -40,7 +40,7 @@ def read_booking_by_id(
     return booking
 
 #update a booking by ID
-@router.put("/bookings/{booking_id}", response_model=BookingRead)
+@router.put("/{booking_id}", response_model=BookingRead)
 def update_booking_by_id(
     booking_id: int,
     booking: BookingStatus,
@@ -57,7 +57,7 @@ def update_booking_by_id(
     return update_booking(db, booking_id, booking)
 
 #delete a booking by ID
-@router.delete("/bookings/{booking_id}", response_model=BookingRead)
+@router.delete("/{booking_id}", response_model=BookingRead)
 def delete_booking_by_id(
     booking_id: int,
     db: Session = Depends(get_db),

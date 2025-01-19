@@ -2,9 +2,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from backend.schemas.users import UserRole, UserRead
-from backend.crud.users import get_user_by_id
-from backend.utils.database import get_db
+from schemas.users import UserRole, UserRead
+from crud.users import get_user_by_id
+from utils.database import get_db
 
 # Define the secret key and algorithm used for JWT
 SECRET_KEY = "your_secret_key"

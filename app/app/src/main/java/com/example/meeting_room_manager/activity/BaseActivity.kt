@@ -66,6 +66,7 @@ abstract class BaseActivity : ComponentActivity() {
     abstract fun getScreenTitle(): String
 
     abstract fun setBackButton(): Boolean
+
     @Composable
     abstract fun ScreenContent()
 
@@ -74,18 +75,22 @@ abstract class BaseActivity : ComponentActivity() {
         Log.d(tag, "Navigating to DashboardActivity")
         startActivity(Intent(this, DashboardActivity::class.java))
     }
+
     open fun onBookingsClicked() {
         Log.d(tag, "Navigating to BookingsActivity")
         startActivity(Intent(this, BookingsActivity::class.java))
     }
+
     open fun onRoomsClicked() {
         Log.d(tag, "Navigating to RoomActivity")
         startActivity(Intent(this, RoomActivity::class.java))
     }
+
     open fun onUsersClicked() {
         Log.d(tag, "Navigating to UserActivity")
         startActivity(Intent(this, UserActivity::class.java))
     }
+
     open fun onSettingsClicked() {
         Log.d(tag, "Navigating to SettingsActivity")
         startActivity(Intent(this, SettingsActivity::class.java))

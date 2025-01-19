@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.models.booking import Booking
-from backend.schemas.booking import BookingCreate
+from models.booking import Booking
+from schemas.booking import BookingCreate
 
 # Create a new booking
 def create_booking(db: Session, booking: BookingCreate):

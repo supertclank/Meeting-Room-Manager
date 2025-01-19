@@ -1,16 +1,16 @@
 from sqlalchemy import Column, Integer, DateTime, Enum, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from backend.models import Base
+from .base import Base
 import enum
 
-#Enum
+# Enum
 class BookingStatus(str, enum.Enum):
     Pending = "Pending"
     Confirmed = "Confirmed"
     Cancelled = "Cancelled"
 
-#Booking Table
+# Booking Table
 class Booking(Base):
     __tablename__ = "bookings"
 
@@ -22,5 +22,7 @@ class Booking(Base):
     status = Column(Enum(BookingStatus), default=BookingStatus.Pending)
     generated_at = Column(DateTime, default=func.now)
 
+    # Relationships
     user = relationship("User", back_populates="bookings")
-    room = relationship("Room")
+    room = relationship("Room", back_populates="bookings")
+    notifications = relationship("Notification", back_populates="booking")

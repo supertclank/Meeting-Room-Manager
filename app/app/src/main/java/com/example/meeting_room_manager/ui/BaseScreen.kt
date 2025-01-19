@@ -42,10 +42,9 @@ fun BaseScreen(
                         IconButton(onClick = onBackButtonClicked) {
                             Icon(Icons.Filled.ArrowBack, contentDescription = "Navigate back")
                         }
-                    }
-                    else{
+                    } else {
                         null
-                }
+                    }
                 }
             )
 

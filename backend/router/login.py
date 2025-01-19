@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, Body
 from sqlalchemy.orm import Session
 from datetime import timedelta
 
-from backend.schemas.login import LoginRequest, TokenResponse
-from backend.utils.database import get_db
-from backend.utils.token import TokenManager
+from schemas.login import LoginRequest, TokenResponse
+from utils.database import get_db
+from utils.token import TokenManager
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
@@ -13,8 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 router = APIRouter()
 
-#login
-@router.post("/login/", response_model=TokenResponse)
+@router.post("/", response_model=TokenResponse)
 async def login(
     login_request: LoginRequest = Body(...),
     db: Session = Depends(get_db)
@@ -41,6 +40,5 @@ async def login(
         access_token=access_token,
         token_type="bearer",
         id=user.id,
-        username=user.username,
         email=user.email
     )

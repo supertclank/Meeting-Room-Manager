@@ -13,7 +13,7 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="enter_credentials">Enter Credentials</string>
-    <string name="incorrect_username_or_password">Incorrect Username Or Password</string>
+    <string name="incorrect_email_or_password">Incorrect email Or Password</string>
     <string name="user_not_found">User Not Found</string>
     <string name="login_failed_general">Login Failed</string>
     <string name="forgot_details_title">Forgot Details</string>

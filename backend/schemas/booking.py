@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 from datetime import datetime, date
-from backend.models.booking import BookingStatus
-from backend.schemas.users import UserRead
-from backend.schemas.room import RoomRead
+from models.booking import BookingStatus
+from schemas.users import UserRead
+from schemas.room import RoomRead
 
 #Booking Schemas
 class BookingBase(BaseModel):

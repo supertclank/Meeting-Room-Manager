@@ -23,12 +23,10 @@ import retrofit2.http.Query
 
 
 interface ApiService {
-    //User endpoints
-
+    // User endpoints
     @GET("users/email/{email}")
     fun checkUserExistsByEmail(@Path("email") email: String): Call<Boolean>
 
-    // User endpoints
     @POST("users/")
     fun createUser(@Body user: UserCreate): Call<UserRead>
 
@@ -38,12 +36,12 @@ interface ApiService {
         @Query("limit") limit: Int,
     ): Call<List<UserRead>>
 
-    @GET("user/{user_id}")
+    @GET("users/{id}")
     fun getUser(
-        @Path("user_id") userId: Int,
+        @Path("id") userId: Int?,
     ): Call<UserRead>
 
-    @DELETE("user/{user_id}")
+    @DELETE("users/{user_id}")
     fun deleteUser(
         @Path("user_id") userId: Int,
     ): Call<Void>
@@ -59,7 +57,7 @@ interface ApiService {
         @Field("client_secret") clientSecret: String? = null,
     ): Call<TokenResponse>
 
-    //Booking endpoints
+    // Booking endpoints
     @POST("bookings/{booking_id}")
     fun createNewBooking(
         @Path("booking_id") bookingId: Int,
@@ -85,7 +83,7 @@ interface ApiService {
         @Path("booking_id") bookingId: Int,
     ): Call<Void>
 
-    //Room endpoints
+    // Room endpoints
     @GET("rooms/{room_id}")
     fun getRoom(
         @Path("room_id") roomId: Int,
@@ -111,7 +109,7 @@ interface ApiService {
         @Path("room_id") roomId: Int,
     ): Call<Void>
 
-    //Notification endpoints
+    // Notification endpoints
     @GET("notifications/{notification_id}")
     fun getNotification(
         @Path("notification_id") notificationId: Int,
@@ -130,5 +128,4 @@ interface ApiService {
 
     @POST("email/recover/")
     fun recoverEmail(@Body recoveryRequest: EmailRecoveryRequest): Call<Void>
-
 }

@@ -3,7 +3,6 @@ package com.example.meeting_room_manager.activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import com.example.meeting_room_manager.ui.BookingsScreen
 import com.example.meeting_room_manager.ui.SettingsScreen
 import kotlinx.coroutines.launch
 

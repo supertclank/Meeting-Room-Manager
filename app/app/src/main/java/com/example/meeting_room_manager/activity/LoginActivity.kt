@@ -22,10 +22,12 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LoginScreen(
-                onLoginClick = { username, password ->
-                    loginVerify(username, password)
+                onLoginClick = { email, password ->
+                    Log.d("LoginActivity", "Login attempt with email: $email")
+                    loginVerify(email, password)
                 },
                 onForgotDetailsClick = {
+                    Log.d("LoginActivity", "Forgot details clicked")
                     startActivity(Intent(this, ForgotDetailsActivity::class.java))
                 }
             )
@@ -33,22 +35,26 @@ class LoginActivity : ComponentActivity() {
     }
 
     // Function to verify user login.
-    private fun loginVerify(username: String, password: String) {
+    private fun loginVerify(email: String, password: String) {
+        Log.d("LoginActivity", "Verifying credentials: email = $email, password = $password")
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, getString(R.string.enter_credentials), Toast.LENGTH_SHORT).show()
+            Log.d("LoginActivity", "Email or password is empty")
             return
         }
 
-        sendLoginRequest(username, password) // Call the function to send login request
+        sendLoginRequest(email, password) // Call the function to send login request
     }
 
     // Function to send the login request using OkHttp
-    private fun sendLoginRequest(username: String, password: String) {
+    private fun sendLoginRequest(email: String, password: String) {
+        Log.d("LoginActivity", "Sending login request for email: $email")
+
         val client = OkHttpClient()
 
         // Create the JSON body
-        val json = """{"username":"$username", "password":"$password"}"""
+        val json = """{"email":"$email", "password":"$password"}"""
         val requestBody = json.toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
@@ -59,7 +65,7 @@ class LoginActivity : ComponentActivity() {
         // Execute the request asynchronously
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
-                Log.e("LoginActivity", "Login failed: ${e.message}", e)
+                Log.e("LoginActivity", "Login request failed: ${e.message}", e)
                 runOnUiThread {
                     Toast.makeText(
                         this@LoginActivity,
@@ -71,13 +77,19 @@ class LoginActivity : ComponentActivity() {
 
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 try {
+                    Log.d("LoginActivity", "Received response with status code: ${response.code}")
+
                     if (response.isSuccessful) {
                         val responseBody = response.body?.string()
-                        val jsonResponse = JSONObject(responseBody)
+                        Log.d("LoginActivity", "Response body: $responseBody")
+
+                        val jsonResponse = JSONObject(responseBody.toString())
                         val token = jsonResponse.getString("access_token")
 
+                        Log.d("LoginActivity", "Access token: $token")
+
                         // Decode the token and extract the user ID
-                        val Id = decodeToken(token) ?: run {
+                        val id = decodeToken(token) ?: run {
                             Log.e("LoginActivity", "Failed to decode token, user ID is null")
                             runOnUiThread {
                                 Toast.makeText(
@@ -92,7 +104,7 @@ class LoginActivity : ComponentActivity() {
                         TokenUtils.saveTokenToStorage(this@LoginActivity, token)
 
                         Log.d("LoginActivity", "Login successful: $responseBody")
-                        Log.d("LoginActivity", "User ID: $Id")
+                        Log.d("LoginActivity", "User ID: $id")
 
                         runOnUiThread {
                             Toast.makeText(
@@ -103,7 +115,7 @@ class LoginActivity : ComponentActivity() {
                         }
 
                         val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
-                        intent.putExtra("USER_ID", Id)
+                        intent.putExtra("USER_ID", id)
                         startActivity(intent)
                         finish()
 
@@ -116,7 +128,7 @@ class LoginActivity : ComponentActivity() {
                             when (response.code) {
                                 401 -> Toast.makeText(
                                     this@LoginActivity,
-                                    "Invalid username or password",
+                                    "Invalid email or password",
                                     Toast.LENGTH_SHORT
                                 ).show()
 
@@ -129,7 +141,7 @@ class LoginActivity : ComponentActivity() {
                         }
                     }
                 } catch (e: Exception) {
-                    Log.e("LoginActivity", "Login failed: ${e.message}", e)
+                    Log.e("LoginActivity", "Login request exception: ${e.message}", e)
                     runOnUiThread {
                         Toast.makeText(
                             this@LoginActivity,
@@ -142,27 +154,16 @@ class LoginActivity : ComponentActivity() {
 
             // Function to decode the token and extract the user ID
             private fun decodeToken(token: String): Int? {
+                Log.d("LoginActivity", "Decoding token: $token")
                 return try {
                     val decodedToken = JWT(token)
-                    decodedToken.getClaim("id").asInt() // Extract the user ID
+                    val userId = decodedToken.getClaim("id").asInt()
+                    Log.d("LoginActivity", "Decoded user ID: $userId")
+                    userId
                 } catch (e: Exception) {
                     Log.e("LoginActivity", "Failed to decode token: ${e.message}", e)
                     null
                 }
-            }
-
-            // Function to handle error responses
-            private fun handleErrorResponse(response: okhttp3.Response) {
-                val errorMessage = when (response.code) {
-                    401 -> getString(R.string.incorrect_username_or_password)
-                    404 -> getString(R.string.user_not_found)
-                    else -> getString(R.string.login_failed_general)
-                }
-
-                runOnUiThread {
-                    Toast.makeText(this@LoginActivity, errorMessage, Toast.LENGTH_SHORT).show()
-                }
-                Log.e("LoginActivity", "Login failed with status code: ${response.code}.")
             }
         })
     }

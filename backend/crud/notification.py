@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.models.notification import Notification
-from backend.schemas.notification import NotificationCreate
+from models.notification import Notification
+from schemas.notification import NotificationCreate
 
 # Create a new notification
 def create_notification(db: Session, notification: NotificationCreate):
