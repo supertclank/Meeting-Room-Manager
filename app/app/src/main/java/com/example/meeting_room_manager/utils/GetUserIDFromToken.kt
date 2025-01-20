@@ -4,7 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.auth0.android.jwt.JWT
 
-private fun getUserIdFromToken(token: String): Int {
+fun getUserIdFromToken(token: String): Int {
     return try {
         val jwt = JWT(token)
         jwt.getClaim("id").asInt() ?: -1 // Return -1 if user ID not found

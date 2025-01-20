@@ -52,7 +52,7 @@ class TokenManager:
         to_encode.update({"exp": expire})
         
         if 'id' in data:
-            to_encode["id"] = data['id']
+            to_encode["sub"] = str(data['id'])
         else:
             raise ValueError("User ID must be provided in the token payload")
 

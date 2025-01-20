@@ -1,6 +1,7 @@
 package com.example.meeting_room_manager.activity
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,12 +25,15 @@ import api.data_class.RoomRead
 import api.data_class.UserRead
 import com.example.meeting_room_manager.ui.AddRoomDialog
 import com.example.meeting_room_manager.ui.RoomScreen
+import com.example.meeting_room_manager.utils.TokenUtils
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class RoomActivity : BaseActivity() {
+
+    private lateinit var token: String
 
     override fun getScreenTitle(): String {
         return "Room"
@@ -48,17 +52,23 @@ class RoomActivity : BaseActivity() {
         var user by remember { mutableStateOf<UserRead?>(null) }
 
         LaunchedEffect(Unit) {
+            token = TokenUtils.getTokenFromStorage(this@RoomActivity) ?: run {
+                Log.e("RoomActivity", "Token is null")
+                Toast.makeText(this@RoomActivity, "Error: No valid token", Toast.LENGTH_SHORT)
+                    .show()
+                return@LaunchedEffect
+            }
+
             coroutineScope.launch {
                 try {
                     val apiService = RetrofitClient.instance
-                    val userId = user?.id // Extracting the user ID
-                    // Fetch user details to check admin status
+                    val userId = TokenUtils.getUserIdFromToken(token)  // Get user ID from token
 
-                    if (userId != null) {
+                    if (userId != -1) {
                         apiService.getUser(userId).enqueue(object : Callback<UserRead> {
                             override fun onResponse(
                                 call: Call<UserRead>,
-                                response: Response<UserRead>,
+                                response: Response<UserRead>
                             ) {
                                 if (response.isSuccessful) {
                                     user = response.body()!!
@@ -72,16 +82,21 @@ class RoomActivity : BaseActivity() {
                             }
 
                             override fun onFailure(call: Call<UserRead>, t: Throwable) {
-                                Log.e("RoomActivity", "Exception fetching user details: ${t.message}")
+                                Log.e(
+                                    "RoomActivity",
+                                    "Exception fetching user details: ${t.message}"
+                                )
                             }
                         })
+                    } else {
+                        Log.e("RoomActivity", "Failed to decode token and retrieve user ID")
                     }
 
-                    val response = RetrofitClient.instance.getRooms()
+                    val response = RetrofitClient.instance.getRooms("Bearer $token")
                     response.enqueue(object : Callback<List<RoomRead>> {
                         override fun onResponse(
                             call: Call<List<RoomRead>>,
-                            response: Response<List<RoomRead>>,
+                            response: Response<List<RoomRead>>
                         ) {
                             if (response.isSuccessful) {
                                 roomList = response.body() ?: emptyList()
@@ -100,7 +115,6 @@ class RoomActivity : BaseActivity() {
                 } catch (e: Exception) {
                     Log.e("RoomActivity", "Exception fetching room list: ${e.message}")
                 }
-
             }
         }
 
@@ -119,15 +133,15 @@ class RoomActivity : BaseActivity() {
                 onDismissRequest = { showAddRoomDialog = false },
                 onRoomAdded = { name, capacity, amenities ->
                     coroutineScope.launch {
-                        createNewRoom(name, capacity, amenities)
+                        createNewRoom(token, name, capacity, amenities)
                         showAddRoomDialog = false
                         // Fetch updated room list after adding a new room
                         try {
-                            val response = RetrofitClient.instance.getRooms()
+                            val response = RetrofitClient.instance.getRooms("Bearer $token")
                             response.enqueue(object : Callback<List<RoomRead>> {
                                 override fun onResponse(
                                     call: Call<List<RoomRead>>,
-                                    response: Response<List<RoomRead>>,
+                                    response: Response<List<RoomRead>>
                                 ) {
                                     if (response.isSuccessful) {
                                         roomList = response.body() ?: emptyList()
@@ -180,7 +194,7 @@ class RoomActivity : BaseActivity() {
         }
     }
 
-    private suspend fun createNewRoom(name: String, capacity: Int, amenities: String?) {
+    private fun createNewRoom(token: String, name: String, capacity: Int, amenities: String?) {
         try {
             val newRoom = RoomCreate(
                 name = name,
@@ -188,8 +202,8 @@ class RoomActivity : BaseActivity() {
                 amenities = amenities,
                 availability = true
             )
-            val response =
-                RetrofitClient.instance.createNewRoom(newRoom)
+
+            val response = RetrofitClient.instance.createNewRoom("Bearer $token", newRoom)
             response.enqueue(object : Callback<RoomRead> {
                 override fun onResponse(call: Call<RoomRead>, response: Response<RoomRead>) {
                     if (response.isSuccessful) {

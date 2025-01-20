@@ -16,6 +16,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -41,9 +42,9 @@ interface ApiService {
         @Path("id") userId: Int?,
     ): Call<UserRead>
 
-    @DELETE("users/{user_id}")
+    @DELETE("users/{id}")
     fun deleteUser(
-        @Path("user_id") userId: Int,
+        @Path("id") userId: Int,
     ): Call<Void>
 
     @FormUrlEncoded
@@ -58,72 +59,77 @@ interface ApiService {
     ): Call<TokenResponse>
 
     // Booking endpoints
-    @POST("bookings/{booking_id}")
+    @POST("bookings/{id}")
     fun createNewBooking(
-        @Path("booking_id") bookingId: Int,
+        @Path("id") bookingId: Int,
         @Body booking: BookingCreate,
     )
 
-    @GET("bookings/{booking_id}")
+    @GET("bookings/{id}")
     fun getBooking(
-        @Path("booking_id") bookingId: Int,
+        @Path("id") bookingId: Int,
     ): Call<BookingRead>
 
     @GET("bookings/")
     fun getBookings(): Call<List<BookingRead>>
 
-    @PUT("bookings/{booking_id}")
+    @PUT("bookings/{id}")
     fun updateBooking(
-        @Path("booking_id") bookingId: Int,
+        @Path("id") bookingId: Int,
         @Body booking: BookingCreate,
     ): Call<BookingRead>
 
-    @DELETE("bookings/{booking_id}")
+    @DELETE("bookings/{id}")
     fun deleteBooking(
-        @Path("booking_id") bookingId: Int,
+        @Path("id") bookingId: Int,
     ): Call<Void>
 
     // Room endpoints
     @GET("rooms/{room_id}")
     fun getRoom(
         @Path("room_id") roomId: Int,
+        @Header("Authorization") token: String
     ): Call<RoomRead>
 
     @GET("rooms/")
-    fun getRooms(): Call<List<RoomRead>>
+    fun getRooms(
+        @Header("Authorization") token: String
+    ): Call<List<RoomRead>>
 
-    @POST("rooms/{room_id}")
+    @POST("rooms/")
     fun createNewRoom(
-        @Path("room_id") roomId: Int,
-        @Body room: RoomCreate,
+        @Header("Authorization") token: String,
+        @Body newRoom: RoomCreate
     ): Call<RoomRead>
 
     @PUT("rooms/{room_id}")
     fun updateRoom(
         @Path("room_id") roomId: Int,
-        @Body room: RoomCreate,
+        @Header("Authorization") token: String,
+        @Body room: RoomCreate
     ): Call<RoomRead>
 
     @DELETE("rooms/{room_id}")
     fun deleteRoom(
         @Path("room_id") roomId: Int,
+        @Header("Authorization") token: String
     ): Call<Void>
 
     // Notification endpoints
-    @GET("notifications/{notification_id}")
+    @GET("notifications/{id}")
     fun getNotification(
-        @Path("notification_id") notificationId: Int,
+        @Path("id") notificationId: Int,
     ): Call<NotificationRead>
 
-    @POST("notifications/{notification_id}")
+    @POST("notifications/{id}")
     fun createNewNotification(
-        @Path("notification_id") notificationId: Int,
+        @Path("id") notificationId: Int,
         @Body notification: NotificationCreate,
     ): Call<NotificationCreate>
 
-    @DELETE("notifications/{notification_id}")
+    @DELETE("notifications/{id}")
     fun deleteNotification(
-        @Path("notification_id") notificationId: Int,
+        @Path("id") notificationId: Int,
     ): Call<Void>
 
     @POST("email/recover/")

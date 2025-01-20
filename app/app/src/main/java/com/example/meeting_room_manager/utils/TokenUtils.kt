@@ -1,10 +1,11 @@
 package com.example.meeting_room_manager.utils
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
 import android.util.Log
-import com.example.meeting_room_manager.activity.SettingsActivity
+import com.auth0.android.jwt.JWT
 import org.json.JSONObject
 
 object TokenUtils {
@@ -46,24 +47,22 @@ object TokenUtils {
         }
     }
 
-
-    // Helper function to convert JSONObject to Map
-    private fun JSONObject.toMap(): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        val keys = this.keys()
-        while (keys.hasNext()) {
-            val key = keys.next()
-            map[key] = this.get(key)
-        }
-        return map
-    }
-
     fun saveTokenToStorage(context: Context, token: String) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(TOKEN_KEY, token)
         editor.apply()
+    }
+
+    fun getUserIdFromToken(token: String): Int {
+        return try {
+            val jwt = JWT(token)
+            jwt.getClaim("id").asInt() ?: -1 // Return -1 if user ID not found
+        } catch (e: Exception) {
+            Log.e(ContentValues.TAG, "getUserIdFromToken: Error decoding token: ${e.message}")
+            -1
+        }
     }
 
 }
