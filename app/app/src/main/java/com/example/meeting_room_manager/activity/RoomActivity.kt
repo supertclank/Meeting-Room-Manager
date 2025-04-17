@@ -68,7 +68,7 @@ class RoomActivity : BaseActivity() {
                         apiService.getUser(userId).enqueue(object : Callback<UserRead> {
                             override fun onResponse(
                                 call: Call<UserRead>,
-                                response: Response<UserRead>
+                                response: Response<UserRead>,
                             ) {
                                 if (response.isSuccessful) {
                                     user = response.body()!!
@@ -96,7 +96,7 @@ class RoomActivity : BaseActivity() {
                     response.enqueue(object : Callback<List<RoomRead>> {
                         override fun onResponse(
                             call: Call<List<RoomRead>>,
-                            response: Response<List<RoomRead>>
+                            response: Response<List<RoomRead>>,
                         ) {
                             if (response.isSuccessful) {
                                 roomList = response.body() ?: emptyList()
@@ -120,7 +120,13 @@ class RoomActivity : BaseActivity() {
 
         RoomScreen(
             onCreateRoomClicked = {
-                showAddRoomDialog = true
+                if (!isAdmin) {
+                    showAddRoomDialog = true
+                } else {
+                    Toast.makeText(this@RoomActivity, "You are not admin", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
             },
             roomListContent = {
                 DisplayRoomList(roomList)
@@ -141,7 +147,7 @@ class RoomActivity : BaseActivity() {
                             response.enqueue(object : Callback<List<RoomRead>> {
                                 override fun onResponse(
                                     call: Call<List<RoomRead>>,
-                                    response: Response<List<RoomRead>>
+                                    response: Response<List<RoomRead>>,
                                 ) {
                                     if (response.isSuccessful) {
                                         roomList = response.body() ?: emptyList()

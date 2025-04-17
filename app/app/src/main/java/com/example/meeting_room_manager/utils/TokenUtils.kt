@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Base64
 import android.util.Log
 import com.auth0.android.jwt.JWT
+import com.example.meeting_room_manager.activity.SettingsActivity
 import org.json.JSONObject
 
 object TokenUtils {
@@ -63,6 +64,14 @@ object TokenUtils {
             Log.e(ContentValues.TAG, "getUserIdFromToken: Error decoding token: ${e.message}")
             -1
         }
+    }
+
+    fun clearToken(settingsActivity: SettingsActivity) {
+        val sharedPreferences: SharedPreferences =
+            settingsActivity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove(TOKEN_KEY)
+        editor.apply()
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.meeting_room_manager.activity
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +13,11 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Room
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import api.RetrofitClient
+import com.example.meeting_room_manager.R
 import com.example.meeting_room_manager.ui.BaseScreen
 import com.example.meeting_room_manager.ui.BottomNavItem
+import com.example.meeting_room_manager.utils.SharedPreferenceManager
 
 abstract class BaseActivity : ComponentActivity() {
 
@@ -60,6 +64,8 @@ abstract class BaseActivity : ComponentActivity() {
                 )
             )
         }
+
+        applyUserPreferences() // Apply user preferences
     }
 
     // Abstract function to be overridden by subclasses
@@ -99,5 +105,42 @@ abstract class BaseActivity : ComponentActivity() {
     private fun backButton() {
         Log.d(tag, "BackButton clicked.")
         startActivity(Intent(this, DashboardActivity::class.java))
+    }
+
+    private fun applyUserPreferences() {
+        val sharedPrefManager = SharedPreferenceManager(this, apiService = RetrofitClient.instance)
+
+        val isDarkModeEnabled = sharedPrefManager.isDarkModeEnabled()
+        setAppTheme(isDarkModeEnabled)
+
+        val fontSize = sharedPrefManager.getFontSize() ?: "Normal"
+        applyFontSize(fontSize)
+    }
+
+    private fun setAppTheme(isDarkModeEnabled: Boolean) {
+        val theme =
+            (
+                    if (isDarkModeEnabled) {
+                        R.style.Theme_MeetingRoomManager
+                        Log.d(TAG, "Setting light theme")
+                    } else {
+                        R.style.Theme_MeetingRoomManager_Dark
+                        Log.d(TAG, "Setting dark theme")
+                    }
+                    )
+        setTheme(theme)
+    }
+
+    private fun applyFontSize(fontSize: String) {
+        val configuration = resources.configuration
+        Log.d(TAG, "Applying font size: $fontSize")
+        val fontScale = when (fontSize) {
+            "Small" -> 0.85f
+            "Large" -> 1.15f
+            else -> 1.0f // Default or "Normal"
+        }
+        configuration.fontScale = fontScale
+        Log.d(TAG, "Font scale applied: $fontScale")
+        resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 }

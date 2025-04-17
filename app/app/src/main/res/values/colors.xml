@@ -16,16 +16,16 @@
     <color name="my_secondary_text_color">#757575</color> <!-- Medium Gray -->
 
     <!-- Dark Theme Colors -->
-    <color name="md_theme_dark_primary">#42A5F5</color> <!-- Medium Blue -->
-    <color name="md_theme_dark_primaryContainer">#1565C0</color> <!-- Dark Blue -->
-    <color name="md_theme_dark_onPrimary">#E3F2FD</color> <!-- Very Light Blue -->
-    <color name="md_theme_dark_secondary">#1E88E5</color> <!-- Light Blue -->
-    <color name="md_theme_dark_onSecondary">#E3F2FD</color> <!-- Very Light Blue -->
-    <color name="md_theme_dark_background">#0D47A1</color> <!-- Deep Blue -->
-    <color name="md_theme_dark_onBackground">#BBDEFB</color> <!-- Lighter Blue -->
-    <color name="md_theme_dark_surface">#0D47A1</color> <!-- Deep Blue -->
-    <color name="md_theme_dark_onSurface">#BBDEFB</color> <!-- Lighter Blue -->
-    <color name="md_theme_dark_error">#B71C1C</color> <!-- Dark Red -->
-    <color name="md_theme_dark_onError">#FFCDD2</color> <!-- Light Red -->
-    <color name="my_dark_primary_text_color">#E3F2FD</color> <!-- Very Light Blue -->
+    <color name="md_theme_dark_primary">#BBDEFB</color> <!-- Lighter Blue -->
+    <color name="md_theme_dark_primaryContainer">#1976D2</color> <!-- Darker Blue -->
+    <color name="md_theme_dark_onPrimary">#0D47A1</color> <!-- Deep Blue -->
+    <color name="md_theme_dark_secondary">#64B5F6</color> <!-- Softer Blue -->
+    <color name="md_theme_dark_onSecondary">#0D47A1</color> <!-- Deep Blue -->
+    <color name="md_theme_dark_background">#121212</color> <!-- Dark Grey -->
+    <color name="md_theme_dark_onBackground">#E3F2FD</color> <!-- Very Light Blue -->
+    <color name="md_theme_dark_surface">#1C1C1C</color> <!-- Slightly Lighter Dark Grey -->
+    <color name="md_theme_dark_onSurface">#E3F2FD</color> <!-- Very Light Blue -->
+    <color name="md_theme_dark_error">#CF6679</color> <!-- Softer Red -->
+    <color name="md_theme_dark_onError">#1C1C1C</color> <!-- Dark Surface Colour -->
+    <color name="my_dark_primary_text_color">#BBDEFB</color> <!-- Lighter Blue -->
 </resources>
